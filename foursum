@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        int n=nums.size();
+        int l,r;
+        
+        vector<vector<int>> ans;//2-dim vector(can be scaled)
+
+        for(int i=0;i<n-3;i++){
+            if(i>0&&nums[i]==nums[i-1]) continue;
+            if ((long long)nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target) break;
+            // 剪枝：如果最大可能的四数和仍小于 target，则跳过当前 i
+            if ((long long)nums[i] + nums[n - 1] + nums[n - 2] + nums[n - 3] < target) continue;
+            for(int j=i+1;j<n-2;j++){
+                if(j>i+1&&nums[j]==nums[j-1]) continue;
+                if ((long long)nums[i] + nums[j] + nums[j + 1] + nums[j + 2] > target) break;
+                // 剪枝：如果最大可能的四数和仍小于 target，则跳过当前 j
+                if ((long long)nums[i] + nums[j] + nums[n - 1] + nums[n - 2] < target) continue;//内外循环必须都优化，单层优化不能保证所有都被优化。
+                l=j+1;
+                r=n-1;
+                
+                while(l<r)
+                {
+                    long long sum=(long long)nums[i]+(long long)nums[j]+(long long)nums[l]+(long long)nums[r];//保证不溢出
+                    if(sum>target){
+                        r--;
+                    }
+                    else if(sum<target){
+                        l++;
+                    }
+                    else{
+                        ans.push_back({nums[i],nums[j],nums[l],nums[r]});
+                        l++;
+                        while((l<r)&&nums[l]==nums[l-1])
+                        {
+                            l++;
+                        }  
+                        r--;
+                        while((l<r)&&nums[r]==nums[r+1])
+                        {
+                            r--;
+                        }
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
