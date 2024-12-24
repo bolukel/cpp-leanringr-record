@@ -6,3 +6,4 @@ git log
 可用git reset --hard 日志地址
 来回到那个状态，来改变日志存放的分支
 git checkout <branch>
+git rebase -i HEAD~n
