@@ -1,0 +1,31 @@
+class Solution {
+    int lowerbound(vector<int>& nums, int target){
+        int left=0,right=nums.size()-1;
+        while(left<=right){
+            int mid=left+(right-left)/2;
+            if(nums[mid]>=target){//[left,mid-1]
+                right=mid-1;
+            }
+            else{//[mid+1,right]
+                left=mid+1;
+            }
+        }
+        // 循环结束后 left = right+1
+        // 此时 nums[left-1] < target 而 nums[left] = nums[right+1] >= target
+        // 所以 left 就是第一个 >= target 的元素下标
+        return left;
+    }
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int start= lowerbound(nums,target);
+        if(start==nums.size()||nums[start]!=target){
+            return {-1,-1};
+        }
+        //start存在说明一定有比target大的数，即(start)of(targe+1)的位置为在最后一个target的后面,-1为end of target
+        int end = lowerbound(nums, target + 1) - 1;
+        return {start, end};
+    }
+};
+
+//定义二分查找闭区间，并用来查找到非递减序列中的第一个（start）target值，
+//其end可以用与比target大1的数的start值再-1得到。
